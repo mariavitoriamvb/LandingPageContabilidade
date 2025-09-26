@@ -43,7 +43,7 @@ export const GlobalStyles = createGlobalStyle`
   .section{
     position: relative;
     height: 100vh;
-    overflow: hidden; /* evita “scroll interno” */
+    overflow: visible; /* evita “scroll interno” */
     z-index: 0;
     padding: 100px;
   }
@@ -71,9 +71,8 @@ export const GlobalStyles = createGlobalStyle`
     z-index: 0;
   }
     /* tudo que está dentro da section fica ACIMA do overlay */
-.section--home > *,
-.section--studio > *{
-  position: relative;
-  z-index: 1;            /* 👈 garante o texto por cima */
-}
+  .section--home > *,
+  .section--studio > *{
+    position: relative;
+    z-index: 1;          
 `

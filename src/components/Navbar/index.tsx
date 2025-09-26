@@ -1,49 +1,45 @@
-import React, { useEffect, useRef } from 'react'
-import { Container, Logo, Nav, NavLink, MobileToggle, MobilePanel, ProgressBarContainer, ProgressBar } from './styles'
-import type { SectionId, SectionMeta } from '../../types'
+// components/Navbar/index.tsx
+import React from 'react'
+import { Container, Nav, NavLink, Logo, ProgressBarContainer, ProgressBar } from './styles'
+import type { SectionMeta, SectionId } from '../../types/types'
 
 type Props = {
   sections: SectionMeta[]
   active: SectionId
   theme: 'light'|'dark'
-  onChange: (id:SectionId)=>void
+  progress: number      // 0..1
+  onChange: (id: SectionId)=>void
 }
 
-export default function Navbar({ sections, active, theme }: Props){
-  const [open, setOpen] = React.useState(false)
-  const progressRef = useRef<HTMLDivElement>(null)
-
-  useEffect(()=>{
-    const onScroll = () => {
-      const h = document.documentElement
-      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100
-      if(progressRef.current) progressRef.current.style.width = pct + '%'
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  },[])
+export default function Navbar({ sections, active, theme, progress, onChange }: Props){
+  const go = (e: React.MouseEvent, id: SectionId) => {
+    e.preventDefault()
+    onChange(id) // usa fullpage_api.moveTo vindo do App
+  }
 
   return (
     <>
-      <ProgressBarContainer><ProgressBar ref={progressRef} /></ProgressBarContainer>
+      <ProgressBarContainer>
+        <ProgressBar style={{ width: `${Math.round(progress*100)}%` }} />
+      </ProgressBarContainer>
+
       <Container data-theme={theme}>
-        <Logo href="#home"><span>Helena</span><em>Campos</em></Logo>
+        <Logo href="#" onClick={(e)=>go(e, sections[0].id)}>
+          <span>Helena</span><em>Campos</em>
+        </Logo>
         <Nav>
-          {sections.map(s=> (
-            <NavLink key={s.id} href={`#${s.id}`} data-active={active===s.id}>{s.label}</NavLink>
+          {sections.map(s=>(
+            <NavLink
+              key={s.id}
+              href={`#${s.id}`}
+              data-active={active===s.id}
+              onClick={(e)=>go(e, s.id)}
+            >
+              {s.label}
+            </NavLink>
           ))}
         </Nav>
-        <MobileToggle onClick={()=>setOpen(v=>!v)} aria-label="Toggle navigation">
-          <span/><span/><span/>
-        </MobileToggle>
       </Container>
-
-      <MobilePanel data-open={open}>
-        {sections.map(s=> (
-          <a key={s.id} href={`#${s.id}`} onClick={()=>setOpen(false)} data-active={active===s.id}>{s.label}</a>
-        ))}
-      </MobilePanel>
     </>
   )
 }

@@ -5,7 +5,7 @@ export default function Hero(){
   return (
     <Grid>
       <div>
-        <Title><mark>Helena Campos</mark> Consultoria & planejamento Fiscal</Title>
+        <Title><mark>Helena Campos</mark> Consultoria & Planejamento Fiscal</Title>
         <Lead>Assessoria contábil sob medida para negócios que exigem precisão, confidencialidade e uma apresentação impecável.</Lead>
         <Actions>
           <a className="primary" href="#projects">Agendar consultoria</a>
